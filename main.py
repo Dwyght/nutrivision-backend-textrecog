@@ -11,10 +11,20 @@ from fastapi.responses import JSONResponse
 import tempfile
 app = FastAPI()
 
+
+
+def resize_for_display(image, max_size=1000):
+    (h, w) = image.shape[:2]
+    scale = max_size / max(h, w)  # Scale based on the longer side
+    resized = cv.resize(image, (int(w * scale), int(h * scale)), interpolation=cv.INTER_AREA)
+    return resized
+
 def process_image(image_path):
     image = cv.imread(image_path, cv.IMREAD_GRAYSCALE)
     if image is None:
         return {"error": "Invalid image file"}
+    
+    image = resize_for_display(image)
 
     # Preprocess image
     img = cv.bilateralFilter(image, 9, 75, 75)
