@@ -9,7 +9,7 @@ import textdistance
 from fastapi import FastAPI, UploadFile, File
 from fastapi.responses import JSONResponse
 import tempfile
-
+pytesseract.pytesseract.tesseract_cmd = os.getenv("TESSERACT_CMD", "./Tesseract-OCR/tesseract.exe")
 app = FastAPI()
 
 def process_image(image_path):
